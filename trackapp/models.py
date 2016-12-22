@@ -1,14 +1,11 @@
 from django.db import models
-
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
-
-
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-# Create your models here.
+
 
 # /***
 # * UsrmManager class here overide django UserMaganer
@@ -57,7 +54,10 @@ class Usr(AbstractBaseUser):
 
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
+
     designation = models.CharField(max_length=140, blank=True)
+    address = models.TextField(default='none',max_length=200,blank=True)
+    contact = models.IntegerField(default=0000000,blank=True)
     #edit here for Address and others fields
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -98,8 +98,23 @@ class Usr(AbstractBaseUser):
         # Simplest possible answer: All ad
         return self.is_admin
 
+"""
+THis Model for Upload file and text
+"""
+class Profile(models.Model):
+    name = models.CharField(max_length=50)
+    picture = models.FileField()
+
+    class Meta:
+        db_table = "profile"
+
+"""
+This method for genrating Token
+"""
 #genratiing token here
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+

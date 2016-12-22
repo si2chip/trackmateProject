@@ -1,11 +1,14 @@
 from django.conf.urls import  url,include
 
 from rest_framework.authtoken import views
-from trackapp.views import LoginView,AuthView,Login,AddUser,UserList
+from trackapp.views import LoginView,AuthView,Login,AddUser,UserList,UsrViewSet
 from rest_framework import routers
+#from . import views
+
+
 router = routers.SimpleRouter()
 router.register(r'adduser', AddUser)
-#router.register(r'userlist',UserList)
+router.register(r'userlist',UsrViewSet)
 
 urlpatterns = [
     url(r'^api/v1/', include(router.urls)),
@@ -20,4 +23,10 @@ urlpatterns = [
     #url(r'^test/', views.TestView.as_view(), name='test-view'),
     url(r'^auth/', AuthView.as_view(), name='auth-view'),
     url(r'^login_api/', Login.as_view(), name='auth-login'),
+
+    #*******************************File upload****************
+    #url(r'^upload/$', views.SaveProfile, name='profile'),
+
+    #url(r'^profile/',TemplateView.as_view(template_name = 'profile.html')),
+    #url(r'^saved/', 'SaveProfile', name = 'saved')
 ]

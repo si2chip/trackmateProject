@@ -91,3 +91,5 @@ urlpatterns = [
     
     }
 
+{"email":"suresh.si2chip@gmail.com","username":"suresheca","password":"bharat1234","confirm_password":"bharat1234"}
+
