@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-
+import uuid
 
 # /***
 # * UsrmManager class here overide django UserMaganer
@@ -24,12 +24,18 @@ class UsrManager(BaseUserManager):
             raise ValueError('Users must have a valid username.')
 
         usr = self.model(
-            email=self.normalize_email(email), username=kwargs.get('username')
+            email=self.normalize_email(email),
+            username=kwargs.get('username'),
+            # first_name=kwargs.get('first_name'),
+            # last_name=kwargs.get('last_name'),
+            # designation=kwargs.get('designation'),
+            # address=kwargs.get('address'),
+            # contact=kwargs.get('contact')
         )
 
         usr.set_password(password)
         usr.save()
-
+        print("create_user",usr)
         return usr
 
     #override django BaseUserManager create_superuser method
@@ -59,7 +65,8 @@ class Usr(AbstractBaseUser):
     address = models.TextField(default='none',max_length=200,blank=True)
     contact = models.IntegerField(default=0000000,blank=True)
     #edit here for Address and others fields
-
+    #reset_id = models.UUIDField(default=uuid.uuid4,blank=True)
+    reset_id=models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -118,3 +125,13 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
+
+#this class for GPS application
+
+class Geodata(models.Model):
+    user_id = models.IntegerField( blank=True, null=False)
+    device_id = models.IntegerField( blank=True, null=False)
+    latitude = models.FloatField( blank=True,null=False)
+    longitude = models.FloatField( blank=True,null=False)
+    speed = models.FloatField(blank=True,null=False)
+    time_stamp = models.DateTimeField(auto_now_add = True)
